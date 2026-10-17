@@ -1,0 +1,31 @@
+#
+# Copyright (C) 2024-2026 OrangeFox Recovery Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# SELinux Policy for Lenovo Tab P12 (TB370FU) Recovery
+# Ensures logd, init, recovery, fastbootd, and adbd operate cleanly when bundled
+# inside a rootfs-labeled recovery ramdisk with enforcing SELinux.
+#
+
+recovery_only(`
+  # Allow logd to execute and map files/libraries from recovery ramdisk rootfs
+  allow logd rootfs:file { entrypoint open read execute map getattr };
+  allow logd rootfs:dir { open read search getattr };
+  allow logd rootfs:lnk_file { read getattr };
+  allow logd kmsg_device:chr_file { open read write getattr };
+
+  # Allow init and recovery to write diagnostic markers to /dev/kmsg and execute ramdisk helpers
+  allow init kmsg_device:chr_file { open write getattr };
+  allow init rootfs:file { open read write getattr execute execute_no_trans map setattr };
+  allow init rootfs:lnk_file { create read getattr unlink };
+  allow init sysfs_leds:file { open read write getattr };
+  allow init sysfs_leds:dir { open read search getattr };
+
+  allow recovery rootfs:file { entrypoint open read write getattr execute execute_no_trans map setattr };
+  allow recovery rootfs:dir { open read write search getattr add_name remove_name };
+  allow recovery rootfs:lnk_file { create read getattr unlink };
+  allow recovery kmsg_device:chr_file { open read write getattr };
+  allow recovery sysfs_leds:file { open read write getattr };
+  allow recovery sysfs_leds:dir { open read search getattr };
+')

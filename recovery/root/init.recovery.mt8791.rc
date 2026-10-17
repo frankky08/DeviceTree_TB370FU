@@ -1,0 +1,3 @@
+# Dual-hardware alias for Lenovo Tab P12 (TB370FU):
+# Bootloader/hardware properties may report either mt6877 or mt8791.
+import /init.recovery.mt6877.rc
