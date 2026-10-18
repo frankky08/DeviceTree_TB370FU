@@ -17,12 +17,12 @@ recovery_only(`
 
   # Allow init and recovery to write diagnostic markers to /dev/kmsg and execute ramdisk helpers
   allow init kmsg_device:chr_file { open write getattr };
-  allow init rootfs:file { open read write getattr execute execute_no_trans map setattr };
+  allow init rootfs:file { open read getattr execute map };
   allow init rootfs:lnk_file { create read getattr unlink };
   allow init sysfs_leds:file { open read write getattr };
   allow init sysfs_leds:dir { open read search getattr };
 
-  allow recovery rootfs:file { entrypoint open read write getattr execute execute_no_trans map setattr };
+  allow recovery rootfs:file { entrypoint open read getattr execute execute_no_trans map };
   allow recovery rootfs:dir { open read write search getattr add_name remove_name };
   allow recovery rootfs:lnk_file { create read getattr unlink };
   allow recovery kmsg_device:chr_file { open read write getattr };
